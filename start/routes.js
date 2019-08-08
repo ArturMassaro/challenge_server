@@ -21,3 +21,5 @@ Route.get('/', () => {
 })
 
 Route.resource('challenges', 'ChallengeController').apiOnly()
+Route.resource('challenges_category', 'ChallengeCategoryController').apiOnly()
+

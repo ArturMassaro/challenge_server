@@ -44,15 +44,15 @@ class ChallengeController {
    */
   async store ({ request, response }) {
     const Challenge = use('App/Models/Challenge')
+    const { title, description, challenge_category_id } = request.body
 
-    const challeng = await Challenge.create(
-      {
-        title: 'test1e',
-        description: 'descriçao top1'
-      }
-    )
+    const challenge = await Challenge.create({
+      title,
+      description,
+      challenge_category_id
+    })
     
-    return  response.json(challeng)
+    return  response.json(challenge)
   }
 
   /**
@@ -65,6 +65,11 @@ class ChallengeController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    const Challenge = use('App/Models/Challenge')
+
+    const challenge = await Challenge.findOrFail(params.id)
+
+    return response.json(challenge)
   }
 
   /**
@@ -88,6 +93,19 @@ class ChallengeController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const Challenge = use('App/Models/Challenge')
+    const { title, description, challenge_category_id } = request.body
+
+    const challenge = await Challenge.findOrFail(params.id)
+    challenge.merge({
+      title,
+      description,
+      challenge_category_id
+    })
+    
+    await challenge.save();
+    return  response.json(challenge)
+
   }
 
   /**
@@ -99,6 +117,12 @@ class ChallengeController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const Challenge = use('App/Models/Challenge')
+
+    const challenge = await Challenge.findOrFail(params.id)
+    await challenge.delete();
+
+    return response.json(challenge)
   }
 }
 
